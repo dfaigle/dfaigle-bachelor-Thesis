@@ -1,0 +1,72 @@
+%% ============================================================
+%%  Bachelor-Thesis – Hochschule Heilbronn
+%%  
+%%  
+%% ============================================================
+
+\documentclass[
+  12pt,
+  a4paper,
+  oneside,
+  openright,
+  listof=totoc,
+  bibliography=totoc,
+  parskip=half          % Absätze durch Leerzeile statt Einrückung
+]{scrreprt}
+
+%% ---- Präambel laden ----------------------------------------
+\input{preamble}
+
+%% ---- Metadaten  -----------------------------
+\newcommand{\ThesisTitel}{Entwicklung und Benchmarking einer Abstraktionsschicht für Quanten-Software}
+\newcommand{\ThesisAutor}{Daniel Faigle}
+\newcommand{\ThesisMatrikel}{215467}
+\newcommand{\ThesisStudiengang}{Software Engineering}
+\newcommand{\ThesisFakultaet}{Informatik}
+\newcommand{\ThesisErstpruefer}{Prof. Dr. rer. nat. David Kreplin
+(Hochschule Heilbronn)}
+\newcommand{\ThesisZweitpruefer}{M.Sc. Moritz Willmann (Fraunhofer IPA)}
+\newcommand{\ThesisUnternehmen}{Fraunhofer-Institut IPA}  
+\newcommand{\ThesisZeitraum}{1.04.2026 - 03.08.2026}
+\newcommand{\ThesisDatum}{August 2026}
+
+
+%% ============================================================
+\begin{document}
+
+%% ---- Titelseite --------------------------------------------
+\include{chapters/00_titelseite}
+
+%% ---- Front Matter (römische Seitenzahlen) ------------------
+\pagenumbering{Roman}
+
+%\include{chapters/00_sperrvermerk}
+%\include{chapters/00_danksagung}
+
+\include{chapters/00_abstract}
+
+\tableofcontents
+%\listoffigures
+%\listoftables
+
+%%\include{chapters/00_abkuerzungen}
+
+%% ---- Hauptteil (arabische Seitenzahlen) --------------------
+\pagenumbering{arabic}
+
+\include{chapters/01_einleitung}
+\include{chapters/02_theoretischer_hintergrund}
+\include{chapters/03_Quanten Computing Software}
+\include{chapters/04_umsetzung}
+\include{chapters/05_evaluation}
+\include{chapters/06_fazit}
+
+%% ---- Back Matter -------------------------------------------
+\printbibliography[title={Literaturverzeichnis}]
+
+\appendix
+\include{chapters/07_anhang}
+
+\include{chapters/08_eidesstattliche_erklaerung}
+
+\end{document}

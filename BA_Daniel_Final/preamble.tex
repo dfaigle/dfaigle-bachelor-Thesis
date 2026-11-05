@@ -1,0 +1,155 @@
+%% ============================================================
+%%  preamble.tex – Pakete & Konfiguration
+%%  Hochschule Heilbronn | Bachelor-Thesis
+%% ============================================================
+
+%% ---- Sprache & Encoding ------------------------------------
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[ngerman]{babel}
+\usepackage{csquotes}      
+\usepackage{physics}
+
+% \enquote{} für korrekte Anführungszeichen
+
+%% ---- Schrift -----------------------------------------------
+\usepackage{lmodern}
+\usepackage{microtype}            % Besserer Textsatz, weniger Overfull hboxes
+
+%% ---- Seitenlayout ------------------------------------------
+%  HHN-Norm: links 3cm (Bindung), rechts 2.5cm, oben/unten 2.5cm
+\usepackage[
+  a4paper,
+  left=3cm,
+  right=2.5cm,
+  top=2.5cm,
+  bottom=2.5cm,
+  bindingoffset=5mm
+]{geometry}
+
+%% ---- Zeilenabstand -----------------------------------------
+\usepackage{setspace}
+\onehalfspacing
+
+%% ---- Kopf- & Fußzeilen (KOMA) ------------------------------
+\usepackage[
+  headsepline,
+  automark
+]{scrlayer-scrpage}
+\pagestyle{scrheadings}
+\automark[section]{chapter}
+\clearpairofpagestyles
+\ihead{\headmark}
+\ohead{\pagemark}
+\cfoot{}
+% Kapitelseiten erhalten dieselbe Kopfzeile
+\renewcommand*{\chapterpagestyle}{scrheadings}
+
+%% ---- Grafik & Abbildungen ----------------------------------
+\usepackage{graphicx}
+\graphicspath{{figures/}}
+\usepackage{float}
+\usepackage{caption}
+\captionsetup{
+  font=small,
+  labelfont=bf,
+  format=hang
+}
+\usepackage{subcaption}
+\usepackage{multirow}
+
+
+%% ---- Tabellen ----------------------------------------------
+\usepackage{booktabs}             % \toprule, \midrule, \bottomrule
+\usepackage{tabularx}
+\usepackage{longtable}
+\usepackage{array}
+
+%% ---- Mathematik --------------------------------------------
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{eurosym}
+%% ---- Quellcode (Listings) ----------------------------------
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{minted} 
+
+\definecolor{lstbg}{gray}{0.97}
+\definecolor{lstcomment}{rgb}{0.13,0.55,0.13}
+\definecolor{lstkeyword}{rgb}{0.0,0.0,0.75}
+\definecolor{lststring}{rgb}{0.63,0.13,0.13}
+
+\lstset{
+  backgroundcolor=\color{lstbg},
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{lstkeyword}\bfseries,
+  commentstyle=\color{lstcomment}\itshape,
+  stringstyle=\color{lststring},
+  numbers=left,
+  numberstyle=\tiny\color{gray},
+  numbersep=8pt,
+  frame=single,
+  framerule=0.4pt,
+  rulecolor=\color{gray!40},
+  breaklines=true,
+  breakatwhitespace=true,
+  captionpos=b,
+  tabsize=2,
+  showstringspaces=false
+}
+
+%% ---- Abkürzungsverzeichnis ---------------------------------
+\usepackage{acronym}
+
+%% ---- Literaturverwaltung (BibLaTeX + Biber) ----------------
+\usepackage[
+  backend=biber,
+  style=ieee,       % Autor-Jahr-Stil (Harvard)
+  % style=numeric         % Nummern-Stil [1], [2], ...
+  % style=ieee            % IEEE-Stil
+  sorting=nyt,
+  maxbibnames=99,
+  maxcitenames=2,
+  giveninits=true,
+  uniquename=init
+]{biblatex}
+\addbibresource{literatur.bib}
+
+%% ---- Hyperlinks & PDF-Metadaten ----------------------------
+\usepackage[
+  colorlinks=true,
+  linkcolor=black,
+  citecolor=black,
+  urlcolor=blue,
+  bookmarksnumbered=true,
+  pdfborder={0 0 0}
+]{hyperref}
+\usepackage{bookmark}
+
+%% ---- Hilfspackages -----------------------------------------
+\usepackage{lipsum}               % Blindtext zum Testen → später entfernen
+
+
+%% --- Code-----------------------------------------------------
+
+
+\lstdefinestyle{python}{
+  language=Python,
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{blue!70!black},
+  stringstyle=\color{green!40!black},
+  commentstyle=\color{gray}\itshape,
+  numbers=left,
+  numberstyle=\tiny\color{gray},
+  numbersep=8pt,
+  frame=single,
+  rulecolor=\color{gray!40},
+  backgroundcolor=\color{gray!5},
+  breaklines=true,
+  showstringspaces=false,
+  captionpos=b,
+  extendedchars=true,
+  literate={ä}{{\"a}}1 {ö}{{\"o}}1 {ü}{{\"u}}1 {Ä}{{\"A}}1 {Ö}{{\"O}}1 {Ü}{{\"U}}1 {ß}{{\ss}}1
+}
+\lstset{style=python}

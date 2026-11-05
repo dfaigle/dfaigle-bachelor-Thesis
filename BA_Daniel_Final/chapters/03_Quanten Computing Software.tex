@@ -1,0 +1,56 @@
+\chapter{Quantencomputing-Software}
+\label{chap:software}
+
+Im Quantencomputing wird eine Vielzahl von Frameworks eingesetzt, die meist auf dem Konzept von Schaltkreisen und Gattern beruhen. In diesem Abschnitt werden die beiden Frameworks \textit{PennyLane} und \textit{Qiskit} vorgestellt, die später auch in der Implementierung und dem Benchmark genutzt werden. Zudem werden der Executor, in dem die Abstraktionsschicht implementiert wurde, sowie auf dem Markt vorhandene Alternativen vorgestellt.
+
+\section{PennyLane}
+\label{sec:pennylane}
+\textit{PennyLane} ist ein auf Python basierendes Open-Source-Framework (Apache License 2.0) für Quantencomputing, das von dem kanadischen Quantencomputing-Unternehmen Xanadu entwickelt wurde~\cite{bergholm2018pennylane}. Das zentrale Merkmal des Frameworks ist die Berechnung von Gradienten parametrisierter Quantenschaltkreise~\cite{schuld2019evaluating} auf eine Weise, die mit klassischen Verfahren wie der Backpropagation kompatibel ist~\cite{baydin2018automatic}. Die aus dem maschinellen Lernen bekannten Methoden der automatischen Differentiation werden so auf quantenmechanische und hybride Berechnungen ausgeweitet~\cite{bergholm2018pennylane}. Damit ist \textit{PennyLane} insbesondere auf den Einsatz von maschinellem Lernen mit Quantencomputern ausgelegt.
+
+Von Haus aus liefert \textit{PennyLane} eigene integrierte Simulatoren mit, darunter den Statevector-Simulator \texttt{lightning.qubit}~\cite{bergholm2018pennylane}. Darüber hinaus stehen den Anwenderinnen und Anwendern über zahlreiche Plugins die Backends diverser externer Plattformen zur Verfügung, darunter IBM Quantum (\textit{Qiskit}), Amazon Braket, Google \textit{Cirq} sowie \textit{Qulacs}~\cite{bergholm2018pennylane}. In dieser Arbeit wird \textit{PennyLane} in Version~0.42.3 verwendet.
+
+\newpage
+\section{Qiskit}
+\label{sec:qiskit}
+Das bereits als Plugin-Backend erwähnte \textit{Qiskit} ist ein auf Python basierendes Open-Source-Framework (Apache License 2.0) für Quantencomputing, das von IBM entwickelt und im Jahr 2017 veröffentlicht wurde~\cite{javadiabhari2024quantum}. Im Gegensatz zu \textit{PennyLane}, dessen Architektur primär auf die differenzierbare Programmierung ausgerichtet ist, verfolgt \textit{Qiskit} einen schaltkreiszentrierten Ansatz. Im Mittelpunkt steht die Klasse \texttt{QuantumCircuit}, mit der Quantenschaltkreise auf Gatterebene konstruiert, manipuliert und anschließend ausgeführt werden~\cite{javadiabhari2024quantum}. Ein zentrales Merkmal von \textit{Qiskit} ist der mehrstufige Transpiler, der einen abstrakten Schaltkreis in eine für die Zielhardware ausführbare Form überführt~\cite{javadiabhari2024quantum}.
+
+Für die Simulation stellt das Zusatzpaket \textit{Qiskit Aer} hochperformante, in C++ implementierte Simulatoren bereit, darunter einen Statevector-Simulator sowie Simulatoren auf Basis von Dichtematrizen und des Stabilizer-Formalismus~\cite{javadiabhari2024quantum}. Darüber hinaus ermöglicht \textit{Qiskit} über das Paket \texttt{qiskit-ibm-runtime} den direkten Zugriff auf die Quantenprozessoren der IBM Quantum Platform~\cite{ibmquantum2026runtime,ibmquantum2026docs}. Durch Provider-Pakete von Drittanbietern lassen sich zudem Backends weiterer Hardware-Hersteller ansprechen~\cite{javadiabhari2024quantum}. In dieser Arbeit wird \textit{Qiskit} in Version~2.4.1 verwendet.
+
+\section{Executor}
+\label{sec:executor}
+
+Der \textit{Executor} ist eine von Fraunhofer entwickelte Python-Bibliothek, mit der sich Quantenschaltkreise und Observablen über eine einheitliche Abstraktionsschicht definieren und anschließend in einem frei wählbaren Backend ausführen lassen. Die Software baut auf der ebenfalls von Fraunhofer entwickelten \textit{sQUlearn}-Bibliothek auf, die intern ebenfalls einen Executor integriert. Die Grundidee besteht darin, die Beschreibung eines Quantenalgorithmus von der konkreten Software zu trennen, die ihn ausführt. Nutzerinnen und Nutzer formulieren einen Schaltkreis somit nur einmal und können ihn wahlweise etwa mit \textit{Qiskit} oder \textit{PennyLane} berechnen lassen, ohne den Code anpassen zu müssen. Das gewünschte Backend wird lediglich über seinen Namen ausgewählt.
+
+Über diese Schnittstelle stehen die zentralen Operationen des Quantencomputing einheitlich zur Verfügung, insbesondere die Berechnung von Erwartungswerten, das Ziehen von Messproben (Sampling), die Bestimmung des Zustandsvektors sowie von Ableitungen. Die eigentliche Umrechnung in das jeweilige Zielformat übernimmt das Backend automatisch im Hintergrund, sodass sich die Nutzung für verschiedene Frameworks gleich anfühlt. Dadurch verbessert die Bibliothek vor allem die Vergleichbarkeit und Reproduzierbarkeit von Ergebnissen über unterschiedliche Backends hinweg.
+
+In dem Stand vor dieser Arbeit wurde für die Definition von Schaltkreisen und Observablen intern noch ein \textit{Qiskit}-Wrapper verwendet. Die abstrakte Beschreibung stützte sich dabei auf \textit{Qiskit}-Objekte als Zwischenrepräsentation und war somit noch an dieses Framework gebunden. Diese Abhängigkeit widerspricht dem Ziel einer vollständig framework-neutralen Abstraktionsschicht und wird in der Weiterentwicklung durch eine eigenständige, von \textit{Qiskit} unabhängige Darstellung ersetzt. Im Verlauf dieser Arbeit wird gezeigt, wie in dem Executor eine solche Abstraktionsschicht entwickelt und implementiert wurde.
+\newpage
+
+% ----------------------------------------------------------------
+\section{Stand der Technik}
+\label{sec:related_work}
+
+Einen vergleichbaren Ansatz zur \textit{Executor Abstraction} wählt zudem die
+\textit{qBraid-SDK}, mit der sich Quantenprogramme beliebiger populärer
+Quantenframeworks definieren lassen. Diese werden zunächst über einen
+graphbasierten Transpiler in ein vom Ziel-Backend erwartetes Format
+übersetzt und anschließend durch eine Kette von \enquote{Passes} geleitet,
+die das Programm an die spezifischen Anforderungen der Zielhardware
+anpassen. Am Ende wird der Job über den \enquote{qBraid Runtime Service}
+an das gewählte Backend übermittelt und dort berechnet. Ergänzend liefert
+die SDK Werkzeuge zur Nachbearbeitung und Visualisierung der Ergebnisse.
+
+Im Gegensatz zum \textit{Executor} liegt der Fokus der \textit{qBraid-SDK}
+damit primär auf der einheitlichen Anbindung von Cloud-Quantenhardware
+und deren Simulatoren verschiedener Anbieter. Zu beachten ist zudem, dass
+der von qBraid empfohlene Workflow über den Runtime Service auf ein
+credit-basiertes Abrechnungsmodell zurückgreift, das sowohl den
+Zugriff auf QPUs als auch auf die verwalteten Cloud-Simulatoren umfasst. 
+
+Der
+\textit{Executor} verfolgt hingegen das Ziel, ein einheitliches Interface
+für die Ausführung und vergleichende Bewertung verschiedener klassisch
+simulierbarer Backends bereitzustellen, um Benchmarking und
+Backend-Auswahl innerhalb einer einzigen Abstraktionsschicht zu
+ermöglichen. Da diese Backends lokal ausgeführt werden, entstehen für die
+Nutzenden keine laufenden Kosten für die Ausführung der Circuits.

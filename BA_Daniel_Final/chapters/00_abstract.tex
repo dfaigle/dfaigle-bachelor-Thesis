@@ -1,0 +1,42 @@
+%% ============================================================
+%%  00_abstract.tex – Abstract & Zusammenfassung
+%% ============================================================
+\chapter*{Abstract}
+\addcontentsline{toc}{chapter}{Abstract}
+% English summary (approx. 150–250 words).
+This bachelor's thesis addresses the development and runtime analysis of an
+abstraction layer that allows quantum circuits and observables to be described in a
+single form and subsequently executed as objects of the quantum frameworks
+\textit{PennyLane} and \textit{Qiskit}. The software component was integrated into
+the \textit{Executor} Python library, which is currently under active development at
+Fraunhofer IPA and is to be published under an open-source license in the near
+future. Its previous internal representation relied on \textit{Qiskit} objects and
+was therefore tied to a single framework. This dependency is replaced by a
+self-contained data structure, so that the description of the circuit remains
+unchanged and the execution environments of the respective other framework can be
+addressed solely by selecting the backend. Since framework calls occur exclusively
+within the backends, a program written once also remains executable across framework
+version changes. In addition, the runtime overhead introduced by this layer compared
+to direct use of the frameworks is evaluated.
+\cleardoublepage
+
+%% ---- Deutsche Zusammenfassung -----------------------------
+\chapter*{Zusammenfassung}
+\addcontentsline{toc}{chapter}{Zusammenfassung}
+% Kurze Zusammenfassung auf Deutsch (ca. 150–250 Wörter).
+Diese Bachelorarbeit befasst sich mit der Entwicklung und der Laufzeitanalyse einer
+Abstraktionsschicht, über die sich Quantenschaltkreise und Observablen einheitlich
+beschreiben und anschließend in den Objekten der Quantenframeworks
+\textit{PennyLane} und \textit{Qiskit} ausführen lassen. Die Softwarekomponente
+wurde in die Python-Softwarebibliothek \textit{Executor} integriert, die derzeit vom
+Fraunhofer IPA aktiv weiterentwickelt wird und in naher Zukunft unter einer
+Open-Source-Lizenz veröffentlicht werden soll. Bislang stützte sich deren interne
+Darstellung auf \textit{Qiskit}-Objekte und war damit an ein einzelnes Framework
+gebunden. Diese Bindung wird durch eine eigenständige Datenstruktur ersetzt, sodass
+die Beschreibung des Schaltkreises unverändert bleibt und sich allein durch die
+Auswahl des Backends die Ausführungsumgebungen des jeweils anderen Frameworks
+ansprechen lassen. Da Framework-Aufrufe ausschließlich innerhalb der Backends
+auftreten, bleibt ein einmal geschriebenes Programm zudem über Versionswechsel der
+Frameworks hinweg lauffähig. Ergänzend wird der zeitliche Mehraufwand bewertet, den
+diese Schicht gegenüber der direkten Nutzung der Frameworks verursacht.
+\cleardoublepage

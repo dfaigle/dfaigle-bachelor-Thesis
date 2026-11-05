@@ -1,0 +1,74 @@
+\chapter{Fazit}
+\label{chap:fazit}
+\section{Zusammenfassung}
+
+Ziel dieser Arbeit war es, eine framework-unabhängige Abstraktionsschicht für die
+Definition parametrisierter Quantenschaltkreise und Observablen zu entwerfen, im
+\textit{Executor} zu implementieren und ihren Laufzeit-Overhead gegenüber der
+direkten Nutzung der Frameworks zu bestimmen. Dieses Ziel wurde erreicht.
+
+Kapitel~\ref{chap:umsetzung} beantwortet FF1. Die Abstraktion ruht auf vier
+framework-unabhängigen Datentypen, deren zulässiges Vokabular zentral in
+\texttt{SUPPORTED\_GATES} festgelegt und durch einen Paritätstest über beide
+Backends abgesichert ist. Die bisherige Bindung an \textit{Qiskit} wurde damit
+aufgelöst, da weder die Basisklassen noch das \textit{PennyLane}-Backend
+\textit{Qiskit} importieren.
+
+Kapitel~\ref{chap:vorteile} beantwortet FF2. Als qualitative Vorteile wurden eine
+einheitliche Definitionsschnittstelle, die Modularisierbarkeit von Schaltkreisen,
+optionale Framework-Abhängigkeiten sowie die Entkopplung von Framework-Versionen
+herausgearbeitet. Zugleich wurde gezeigt, dass sich die Ausdrucksstärke der
+Schnittstelle notwendigerweise auf die Schnittmenge der unterstützten Frameworks
+beschränkt.
+
+Kapitel~\ref{chap:benchmark} beantwortet FF3 mit einem zweigeteilten Befund.
+Gegenüber \textit{PennyLane} entsteht in der Ausführung kein messbarer Overhead, da
+der \textit{Executor} eine vorbereitete Instruktionsliste abspielt, während die
+native Seite den Schaltkreis bei jedem Aufruf neu aufzeichnet. Gegenüber
+\textit{Qiskit} kostet die Abstraktion dagegen messbar, und zwar um den Faktor
+$1{,}97$ bei der Erstellung, $1{,}40$ bei der Ausführung und $2{,}40$ bei der
+Gradientenberechnung. Der relative Overhead der Ausführung nimmt mit wachsender
+Qubit-Zahl ab, da der Zusatzaufwand aus reiner Python-Buchhaltung besteht und nicht
+von der Registergröße abhängt. Allein bei der Gradientenberechnung über
+\textit{Qiskit} wächst der Faktor mit der Gatterzahl, was auf die tiefen
+Schaltkreiskopien der Parameter-Shift-Regel zurückgeht. Der gemessene Vorsprung des
+\textit{Executors} bei der Gradientenberechnung über \textit{PennyLane} bleibt wegen
+abweichender Bibliotheksversionen zwischen beiden Messläufen nur eingeschränkt
+belastbar.
+
+Der gemessene Mehraufwand fällt gegenüber dem gewonnenen Nutzen gering aus.
+Gegenüber \textit{PennyLane} arbeitet der \textit{Executor} auf dem Niveau der
+nativen API, und gegenüber \textit{Qiskit} bewegt sich der Overhead in der
+Ausführung in einem Bereich, der sich mit wachsender Registergröße weiter
+angleicht, da der Zusatzaufwand nicht mit der Qubit-Zahl skaliert. Er beschränkt
+sich damit auf einen konstanten Anteil an Python-Arbeit, dem eine einmalige, über
+sämtliche Backends hinweg wiederverwendbare Problembeschreibung gegenübersteht.
+Gerade dort, wo Laufzeit tatsächlich ins Gewicht fällt, also bei großen Registern
+und rechenintensiven Simulationen, verliert der Overhead zusätzlich an Bedeutung.
+Die in Kapitel~\ref{chap:vorteile} beschriebenen Vorteile, insbesondere die
+kontrollierte Vergleichbarkeit von Backends, die optionalen
+Framework-Abhängigkeiten und die Stabilität über Versionswechsel hinweg, wiegen
+diesen Anteil in der Praxis auf.
+
+Damit sind alle drei Forschungsfragen beantwortet.
+% ----------------------------------------------------------------
+\newpage
+\section{Ausblick}
+\label{sec:ausblick}
+Der Executor im Allgemeinen und die Abstraktionsschicht können noch
+weiterentwickelt werden, um Anbindungen an weitere Backends zu schaffen. Im
+Moment werden nur \textit{PennyLane} und \textit{Qiskit} als API-Endpunkte
+unterstützt, was bereits eine gute Basis bildet. Darüber hinaus ist die Grundlage
+für eine Implementierung von \textit{Qulacs} und der Pauli-Propagation bereits
+gegeben. Bei diesen fehlt jedoch noch die Umwandlung der abstrakten Schaltkreis-
+und Observablen-Objekte in die Framework-spezifischen Repräsentationen. Auch
+weitere Frameworks wie \textit{Cirq}, \textit{Braket SDK} oder \textit{Q\#} wären
+sinnvolle Ergänzungen. Damit würde der Executor ein größeres Ökosystem
+unterstützen und mehr Nutzerinnen und Nutzer ansprechen, die diese Backends
+einsetzen.
+
+Zudem orientiert sich die Abstraktionsschicht derzeit an der NISQ-Ära, also an verrauschten Quantencomputern ohne Fehlerkorrektur~\cite{preskill2018quantum}. Ihr Entwurf ist daher auf parametrisierte Schaltkreise sowie die Berechnung von Erwartungswerten und Gradienten ausgelegt. Perspektivisch wird jedoch das fehlertolerante Quantencomputing wichtiger, das mit fehlerkorrigierten logischen Qubits arbeitet. Diese Technologie steht allerdings noch am Anfang und ist bisher nicht praktisch nutzbar, sodass eine Anpassung der Abstraktionsschicht erst mit der Verfügbarkeit entsprechender Backends sinnvoll wird.
+
+% Was sind sinnvolle nächste Schritte?
+% Offen gebliebene Fragen, mögliche Erweiterungen,
+% Verbesserungspotenziale, Anknüpfungspunkte für weitere Arbeiten.
